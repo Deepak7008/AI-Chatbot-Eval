@@ -1,0 +1,20 @@
+[
+  {
+    "id": "CHAT-10",
+    "category": "chit_chat",
+    "query": "How are you today",
+    "context": {
+      "order_id": null,
+      "original_chat_id": 10,
+      "timestamp": "2026-06-27T13:47:08.276791",
+      "router_intent": "chit_chat",
+      "agent_used": "chit_chat"
+    },
+    "reference_answer": "I'm doing well. How can i assist you",
+    "tags": [
+      "promoted",
+      "organic"
+    ],
+    "difficulty": "medium"
+  }
+]

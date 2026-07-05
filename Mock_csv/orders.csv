@@ -1,0 +1,7 @@
+order_id,user_id,status,channel,order_date,estimated_delivery,actual_delivered_date,cancelled_date,cancellation_reason,return_initiated_date,return_reason,return_status,refund_amount,refund_date,refund_status,tracking_number,shipping_address,product_id,quantity,unit_price_at_purchase
+ORD-1042,U-001,Shipped,web,01-05-2026,05-05-2026,,,,,,,,,,TRK-987654321,"123 Tech Lane, Silicon Valley, CA",PROD-A15-BLK,1,799
+ORD-1043,U-002,Processing,app,06-05-2026,10-05-2026,,,,,,,,,,,"456 Fashion Ave, New York, NY",PROD-S24-ULT,1,1199
+ORD-1044,U-003,Delivered,store,20-04-2026,25-04-2026,24-04-2026,,,,,,,,,TRK-123456789,"789 Brew St, Seattle, WA",PROD-OP12-GRN,1,749
+ORD-1045,U-001,Cancelled,web,10-04-2026,,,11-04-2026,Found better price elsewhere,,,,,,,,"123 Tech Lane, Silicon Valley, CA",PROD-A17-PRO,1,1099
+ORD-1046,U-002,Returned,app,15-03-2026,20-03-2026,18-03-2026,,,22-03-2026,Defective screen,Refunded,899,25-03-2026,Completed,TRK-555555555,"456 Fashion Ave, New York, NY",PROD-A16-WHT,1,899
+ORD-1047,U-004,Processing,web,20-06-2026,30-06-2026,,,,,,,,,,,"Bangalore,India",PROD-OPPO-BLUE,1,600

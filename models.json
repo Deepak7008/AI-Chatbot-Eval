@@ -1,0 +1,32 @@
+[
+  {
+    "display_name": "DeepSeek V3",
+    "provider": "openrouter",
+    "model_id": "deepseek/deepseek-chat",
+    "description": "Extremely powerful MoE model with exceptional reasoning at low cost."
+  },
+  {
+    "display_name": "Llama 3.3 70B",
+    "provider": "groq",
+    "model_id": "llama-3.3-70b-versatile",
+    "description": "Best free Groq model. Fast, strong reasoning."
+  },
+  {
+    "display_name": "Gemini 2.5 Flash",
+    "provider": "gemini",
+    "model_id": "gemini-2.5-flash",
+    "description": "Best free Gemini model. Strong reasoning, free tier."
+  },
+  {
+    "display_name": "Llama 3.3 70B",
+    "provider": "openrouter",
+    "model_id": "meta-llama/llama-3.3-70b-instruct",
+    "description": "Top-tier 70B open weight model. Highly capable."
+  },
+  {
+    "display_name": "Qwen 2.5 72B",
+    "provider": "openrouter",
+    "model_id": "qwen/qwen-2.5-72b-instruct",
+    "description": "Alibaba's flagship open model. Strong coding and logical reasoning."
+  }
+]

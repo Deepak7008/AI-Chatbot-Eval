@@ -1,0 +1,7 @@
+id,name,color,category,price,warranty_months,stock_quantity
+PROD-A15-BLK,Apple iPhone 15,Black,Mobile Phone,799,12,45
+PROD-A16-WHT,Apple iPhone 16,White,Mobile Phone,899,12,12
+PROD-A17-PRO,Apple iPhone 17 Pro,Titanium,Mobile Phone,1099,12,0
+PROD-S24-ULT,Samsung Galaxy S24 Ultra,Gray,Mobile Phone,1199,12,8
+PROD-OP12-GRN,OnePlus 12,Green,Mobile Phone,799,12,25
+PROD-OPPO-BLUE,Oppo Reno15,Blue,Mobile Phone,800,15,30

@@ -1,0 +1,384 @@
+/* ==========================================================================
+   Midnight Linear Design System
+   A dark-first, cool-blue developer tool theme inspired by Linear & Vercel.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* --------------------------------------------------------------------------
+   1. Design Tokens
+   -------------------------------------------------------------------------- */
+:root {
+    /* Surfaces */
+    --bg-primary:     #0A0A0F;
+    --bg-secondary:   #111118;
+    --bg-elevated:    #1A1A24;
+    --bg-hover:       #22222E;
+
+    /* Borders */
+    --border-default: #2A2A3C;
+    --border-subtle:  #1E1E2A;
+
+    /* Text */
+    --text-primary:   #EAEAF0;
+    --text-muted:     #8888A0;
+    --text-faint:     #555566;
+
+    /* Accent (Blue) */
+    --accent:         #3B82F6;
+    --accent-hover:   #60A5FA;
+    --accent-muted:   rgba(59, 130, 246, 0.15);
+
+    /* Semantic */
+    --success:        #34D399;
+    --danger:         #F87171;
+    --warning:        #FBBF24;
+    --info:           #38BDF8;
+
+    /* Streamlit Native Variable Mapping */
+    --primary-color:              #3B82F6 !important;
+    --background-color:           #0A0A0F !important;
+    --secondary-background-color: #111118 !important;
+    --text-color:                 #EAEAF0 !important;
+}
+
+/* --------------------------------------------------------------------------
+   2. Global Reset & Typography
+   -------------------------------------------------------------------------- */
+html, body, [class*="css"], .stApp {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+}
+
+/* Headings — Inter 600, tight tracking */
+h1, h2, h3 {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--text-primary) !important;
+}
+
+h1 { font-size: 1.75rem !important; }
+h2 { font-size: 1.35rem !important; }
+h3 { font-size: 1.1rem !important; }
+
+/* --------------------------------------------------------------------------
+   3. Layout & Spacing
+   -------------------------------------------------------------------------- */
+.block-container {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2rem !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Sidebar
+   -------------------------------------------------------------------------- */
+[data-testid="stSidebar"] {
+    background-color: var(--bg-secondary) !important;
+    border-right: 1px solid var(--border-subtle) !important;
+    min-width: 200px !important;
+    max-width: 200px !important;
+}
+
+/* Sidebar nav items */
+[data-testid="stSidebar"] a {
+    color: var(--text-muted) !important;
+    font-weight: 500 !important;
+    transition: color 0.15s ease !important;
+}
+
+[data-testid="stSidebar"] a:hover,
+[data-testid="stSidebar"] a[aria-selected="true"] {
+    color: var(--text-primary) !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. Primary Buttons — Blue accent, squared-off
+   -------------------------------------------------------------------------- */
+button[kind="primary"] {
+    background-color: var(--accent) !important;
+    color: #FFFFFF !important;
+    border-radius: 8px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    border: none !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease !important;
+}
+
+button[kind="primary"]:hover {
+    background-color: var(--accent-hover) !important;
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.3) !important;
+}
+
+button[kind="primary"]:focus-visible {
+    outline: 2px solid var(--accent) !important;
+    outline-offset: 2px !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. Secondary Buttons — Ghost style
+   -------------------------------------------------------------------------- */
+button[kind="secondary"] {
+    background-color: transparent !important;
+    color: var(--text-primary) !important;
+    border-radius: 8px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 500 !important;
+    border: 1px solid var(--border-default) !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease !important;
+}
+
+button[kind="secondary"]:hover {
+    background-color: var(--bg-elevated) !important;
+    border-color: var(--accent) !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. Chat Messages
+   -------------------------------------------------------------------------- */
+div[data-testid="stChatMessage"] {
+    border-radius: 10px !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin-bottom: 0.8rem !important;
+    padding: 12px 16px !important;
+}
+
+/* User messages — subtle card */
+div[data-testid="stChatMessage"][data-baseweb="card"]:nth-child(even) {
+    background-color: var(--bg-elevated) !important;
+    border: 1px solid var(--border-default) !important;
+}
+
+/* Chat message text */
+div[data-testid="stChatMessage"] p {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 14.5px !important;
+    line-height: 1.6 !important;
+    color: var(--text-primary) !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* --------------------------------------------------------------------------
+   8. Text Inputs & Chat Input
+   -------------------------------------------------------------------------- */
+div[data-testid="stTextInput"] > div > div > input,
+div[data-testid="stChatInput"] textarea {
+    background-color: var(--bg-elevated) !important;
+    color: var(--text-primary) !important;
+    font-family: 'Inter', sans-serif !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--border-default) !important;
+    box-shadow: none !important;
+    padding: 12px 16px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+div[data-testid="stTextInput"] > div > div:focus-within,
+div[data-testid="stChatInput"]:focus-within {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-muted) !important;
+}
+
+/* --------------------------------------------------------------------------
+   9. DataFrames & Tables
+   -------------------------------------------------------------------------- */
+div[data-testid="stDataFrame"] {
+    border-radius: 10px !important;
+    border: 1px solid var(--border-default) !important;
+    box-shadow: none !important;
+    background-color: var(--bg-secondary) !important;
+}
+
+/* --------------------------------------------------------------------------
+   10. Labels, Captions & Eyebrows
+   -------------------------------------------------------------------------- */
+label, div[data-testid="stMarkdownContainer"] small {
+    font-family: 'Inter', sans-serif !important;
+    color: var(--text-muted) !important;
+    font-weight: 500 !important;
+}
+
+/* --------------------------------------------------------------------------
+   11. Tabs — clean underline style
+   -------------------------------------------------------------------------- */
+button[data-baseweb="tab"] {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 500 !important;
+    color: var(--text-muted) !important;
+    border-bottom: 2px solid transparent !important;
+    transition: color 0.15s ease, border-color 0.15s ease !important;
+}
+
+button[data-baseweb="tab"]:hover {
+    color: var(--text-primary) !important;
+}
+
+button[data-baseweb="tab"][aria-selected="true"] {
+    color: var(--accent) !important;
+    border-bottom-color: var(--accent) !important;
+}
+
+/* --------------------------------------------------------------------------
+   12. Expanders
+   -------------------------------------------------------------------------- */
+details[data-testid="stExpander"] {
+    border: 1px solid var(--border-default) !important;
+    border-radius: 10px !important;
+    background-color: var(--bg-secondary) !important;
+}
+
+details[data-testid="stExpander"] summary {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 500 !important;
+    color: var(--text-primary) !important;
+}
+
+/* --------------------------------------------------------------------------
+   12b. Status Widget (st.status — "Processing...", "Response Ready!")
+   -------------------------------------------------------------------------- */
+div[data-testid="stStatus"],
+div[data-testid="stStatusWidget"] {
+    background-color: var(--bg-secondary) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: 10px !important;
+    color: var(--text-primary) !important;
+}
+
+/* Status widget inner content and label */
+div[data-testid="stStatus"] > div,
+div[data-testid="stStatusWidget"] > div {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Status expanded content area */
+div[data-testid="stStatus"] details {
+    background-color: var(--bg-secondary) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: 10px !important;
+}
+
+div[data-testid="stStatus"] summary {
+    color: var(--text-primary) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 500 !important;
+}
+
+/* --------------------------------------------------------------------------
+   12c. Chat Input Bottom Bar Container
+   -------------------------------------------------------------------------- */
+div[data-testid="stBottom"],
+div[data-testid="stBottom"] > div {
+    background-color: var(--bg-primary) !important;
+    border-top: 1px solid var(--border-subtle) !important;
+}
+
+/* Chat input wrapper (the bar itself) */
+div[data-testid="stChatInput"] {
+    background-color: var(--bg-elevated) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: 10px !important;
+}
+
+/* Chat send button */
+div[data-testid="stChatInput"] button {
+    background-color: var(--accent) !important;
+    color: #FFFFFF !important;
+    border-radius: 8px !important;
+}
+
+/* --------------------------------------------------------------------------
+   13. Metrics — make numbers pop
+   -------------------------------------------------------------------------- */
+div[data-testid="stMetric"] label {
+    color: var(--text-muted) !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+}
+
+div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+}
+
+/* --------------------------------------------------------------------------
+   14. Dividers
+   -------------------------------------------------------------------------- */
+hr {
+    border-color: var(--border-subtle) !important;
+    opacity: 0.6 !important;
+}
+
+/* --------------------------------------------------------------------------
+   15. Selectbox & Multiselect dropdowns
+   -------------------------------------------------------------------------- */
+div[data-baseweb="select"] > div {
+    background-color: var(--bg-elevated) !important;
+    border-color: var(--border-default) !important;
+    border-radius: 8px !important;
+}
+
+div[data-baseweb="select"] > div:focus-within {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-muted) !important;
+}
+
+/* Dropdown menu */
+div[data-baseweb="popover"] > div {
+    background-color: var(--bg-elevated) !important;
+    border: 1px solid var(--border-default) !important;
+    border-radius: 8px !important;
+}
+
+/* --------------------------------------------------------------------------
+   16. Sliders
+   -------------------------------------------------------------------------- */
+div[data-testid="stSlider"] div[role="slider"] {
+    background-color: var(--accent) !important;
+}
+
+/* --------------------------------------------------------------------------
+   17. Progress bars
+   -------------------------------------------------------------------------- */
+div[data-testid="stProgress"] > div > div {
+    background-color: var(--accent) !important;
+}
+
+/* --------------------------------------------------------------------------
+   18. Alerts (st.info, st.success, st.warning, st.error)
+   -------------------------------------------------------------------------- */
+div[data-testid="stAlert"] {
+    border-radius: 8px !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+/* --------------------------------------------------------------------------
+   19. Scrollbar styling (subtle)
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-default);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-faint);
+}

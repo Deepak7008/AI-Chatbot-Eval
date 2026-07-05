@@ -1,0 +1,23 @@
+category,subcategory,grouping_key,value
+refunds,,method,Refunds are issued to the original form of payment.
+refunds,,timeline,Refunds are processed within 5-7 business days after the phone is received and inspected at our facility.
+returns,,process,"To initiate a return, log into your account and print a shipping label. Factory reset the phone before shipping."
+returns,,return_shipping_fee,Free return shipping for all mobile phones.
+returns,,standard_window_days,15
+returns,conditions,,Mobile phones must be returned within 15 days of delivery.
+returns,conditions,,"Phones must be in their original, sealed packaging to avoid a restocking fee."
+returns,conditions,,Opened phones incur a 15% restocking fee.
+returns,conditions,,Phones with physical damage or liquid damage cannot be returned.
+returns,in_store_return_option,,Online orders can be returned at brand stores only
+returns,exceptions,,Refurbished or clearance phones are final sale and cannot be returned.
+shipping,standard,cost,0
+shipping,expedited,cost,15
+shipping,overnight,cost,25
+shipping,standard,free_threshold,0
+shipping,standard,time_days,3-5 business days
+shipping,expedited,time_days,2 business days
+shipping,overnight,time_days,1 business day
+warranties,,exclusions,"Warranties do NOT cover accidental damage (drops, cracked screens) or liquid damage unless an extended protection plan was purchased."
+warranties,,extended,"Extended warranty (AppleCare+, Samsung Care+) must be purchased within 60 days of the original purchase date."
+warranties,,standard,All new mobile phones come with a standard 1-year manufacturer warranty covering hardware defects.
+shipping,address_change_policy,,Address can be changed before order is in processing. Cannot change once the order status is changed to Shipped or Delivered
