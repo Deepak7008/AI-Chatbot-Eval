@@ -91,7 +91,7 @@ ChatBot+Eval/
 ```
 *For deep-dive documentation on how data flows through the system, check the `Documents/Architectural Diagram/` folder.*
 
-#### $\textsf{\color{#28a745}{Read the implementation Plan.md file for more details on running the app and evaluations.}}$
+#### $\textsf{\color{#28a745}{Read the implementation Plan.md (Documents folder)file for more details on running the app and evaluations.}}$
 
 ---
 
