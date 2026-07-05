@@ -79,3 +79,5 @@ data/*.sqlite3
 secrets.json
 credentials.json
 service-account.json
+# Testing
+.pytest_cache/
