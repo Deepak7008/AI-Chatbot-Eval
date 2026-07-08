@@ -27,7 +27,7 @@ setup_db()
 
 st.title("Full-Stack AI Customer Support Chatbot + Evaluation Framework")
 st.markdown("""
-Welcome to the Developer UI! Use this Setup page to configure your LLM settings.
+Use this Setup page to configure your LLM settings.
 Navigate to the pages on the left to start chatting or view the history.
 """)
 

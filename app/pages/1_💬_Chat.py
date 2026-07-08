@@ -22,7 +22,8 @@ if "session_id" not in st.session_state:
 # Header and Controls
 col1, col2 = st.columns([8, 2])
 with col1:
-    st.title("💬 Live Developer Chat")
+    st.title("💬 Support Bot")
+    st.markdown("Start a conversation with our AI assistant. ")
 with col2:
     st.write("") # Spacing
     if st.button("🗑️ Clear Chat", use_container_width=True):
