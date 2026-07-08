@@ -24,8 +24,12 @@ def check_password():
     """
     import hmac
 
-    # If no password is set in the secrets, allow access (so local dev works without secrets)
-    if "APP_PASSWORD" not in st.secrets:
+    # Safely try to access secrets
+    try:
+        if "APP_PASSWORD" not in st.secrets:
+            return True
+        expected_password = st.secrets["APP_PASSWORD"]
+    except FileNotFoundError:
         return True
 
     def login_form():
@@ -36,7 +40,7 @@ def check_password():
 
     def password_entered():
         """Checks whether a password entered by the user is correct."""
-        if hmac.compare_digest(st.session_state["password"], st.secrets["APP_PASSWORD"]):
+        if hmac.compare_digest(st.session_state["password"], expected_password):
             st.session_state["password_correct"] = True
             del st.session_state["password"]  # Don't store the password in session state
         else:

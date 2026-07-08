@@ -167,10 +167,9 @@ div[data-testid="stChatMessage"] p {
 }
 
 /* --------------------------------------------------------------------------
-   8. Text Inputs & Chat Input
+   8. Text Inputs
    -------------------------------------------------------------------------- */
-div[data-testid="stTextInput"] > div > div > input,
-div[data-testid="stChatInput"] textarea {
+div[data-testid="stTextInput"] > div > div > input {
     background-color: var(--bg-elevated) !important;
     color: var(--text-primary) !important;
     font-family: 'Inter', sans-serif !important;
@@ -181,8 +180,7 @@ div[data-testid="stChatInput"] textarea {
     transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-div[data-testid="stTextInput"] > div > div:focus-within,
-div[data-testid="stChatInput"]:focus-within {
+div[data-testid="stTextInput"] > div > div:focus-within {
     border-color: var(--accent) !important;
     box-shadow: 0 0 0 3px var(--accent-muted) !important;
 }
@@ -282,10 +280,29 @@ div[data-testid="stBottom"] > div {
 }
 
 /* Chat input wrapper (the bar itself) */
-div[data-testid="stChatInput"] {
+div[data-testid="stChatInput"] > div {
     background-color: var(--bg-elevated) !important;
     border: 1px solid var(--border-default) !important;
     border-radius: 10px !important;
+    padding-right: 0.5rem !important;
+}
+
+div[data-testid="stChatInput"] > div:focus-within {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-muted) !important;
+}
+
+/* Ensure textarea itself has transparent bg and no border */
+div[data-testid="stChatInput"] textarea {
+    background-color: transparent !important;
+    color: var(--text-primary) !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+div[data-testid="stChatInput"] textarea:focus {
+    box-shadow: none !important;
+    border: none !important;
 }
 
 /* Chat send button */
@@ -293,6 +310,13 @@ div[data-testid="stChatInput"] button {
     background-color: var(--accent) !important;
     color: #FFFFFF !important;
     border-radius: 8px !important;
+    height: 2.2rem !important;
+    width: 2.2rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 /* --------------------------------------------------------------------------
