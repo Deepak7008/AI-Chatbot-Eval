@@ -8,13 +8,17 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from evals.db import init_db
 from agents.llm_client import get_display_names, resolve_model_from_display, MODEL_REGISTRY
 from agents.utils import load_json
-from app.ui_utils import load_fluent_css
+from app.ui_utils import load_fluent_css, check_password
 
 st.set_page_config(
     page_title="Setup",
     page_icon="⚙️",
     layout="wide"
 )
+
+# Enforce password protection if configured
+if not check_password():
+    st.stop()
 
 load_fluent_css()
 

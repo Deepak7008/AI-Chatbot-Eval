@@ -9,9 +9,21 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')
 
 from agents.pipeline import run_pipeline
 from evals.db import log_chat
-from app.ui_utils import load_fluent_css
+from app.ui_utils import load_fluent_css, check_password, check_password
 
-st.set_page_config(page_title="Chat", page_icon="💬", layout="wide")
+st.set_page_config(
+    page_title="Chat",
+    page_icon="💬",
+    layout="wide"
+)
+
+# Enforce password protection if configured
+if not check_password():
+    st.stop()
+
+if not check_password():
+    st.stop()
+
 load_fluent_css()
 # Initialize Session State
 if "messages" not in st.session_state:

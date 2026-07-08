@@ -4,11 +4,14 @@ import pandas as pd
 import json
 import os
 import sys
-from app.ui_utils import load_fluent_css
+from app.ui_utils import load_fluent_css, check_password
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 st.set_page_config(page_title="Chat History", page_icon="📋", layout="wide")
+if not check_password():
+    st.stop()
+
 load_fluent_css()
 st.title("📋 Chat History & Data Flywheel")
 st.markdown("View past interactions, analyze traces, and promote failed conversations to the eval dataset.")

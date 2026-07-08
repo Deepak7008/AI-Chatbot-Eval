@@ -7,13 +7,16 @@ import pandas as pd
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from app.ui_utils import load_fluent_css
+from app.ui_utils import load_fluent_css, check_password
 from agents.llm_client import MODEL_REGISTRY, get_display_names, resolve_model_from_display
 from evals.cascade import run_eval_suite
 from evals.bias_check import run_bias_check
 from evals.judge import DIMENSIONS
 
 st.set_page_config(page_title="Evaluation", page_icon="⚖️", layout="wide")
+if not check_password():
+    st.stop()
+
 load_fluent_css()
 
 if "eval_results" not in st.session_state:

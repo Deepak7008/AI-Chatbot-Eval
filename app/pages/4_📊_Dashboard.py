@@ -9,12 +9,15 @@ import numpy as np
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from app.ui_utils import load_fluent_css
+from app.ui_utils import load_fluent_css, check_password
 from evals.db import get_eval_runs, get_eval_results
 from evals.judge import DIMENSIONS
 from evals.metrics import spearman_correlation, cohens_d, paired_ttest, bootstrap_ci
 
 st.set_page_config(page_title="Dashboard", page_icon="📊", layout="wide")
+if not check_password():
+    st.stop()
+
 load_fluent_css()
 
 st.title("📊 Analytics Dashboard")
