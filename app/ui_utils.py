@@ -17,6 +17,13 @@ def load_fluent_css():
     except Exception as e:
         print(f"[UI] Warning: Could not load anthropic_style.css: {e}")
 
+def is_access_unlocked():
+    """
+    Returns True if user has unlocked token operations via password.
+    Used to protect token-costing operations like chat and evaluation.
+    """
+    return st.session_state.get("access_unlocked", False)
+
 def check_password():
     """
     Returns `True` if the user had a correct password.

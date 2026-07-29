@@ -7,15 +7,13 @@ import pandas as pd
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from app.ui_utils import load_fluent_css, check_password
+from app.ui_utils import load_fluent_css, check_password, is_access_unlocked
 from agents.llm_client import MODEL_REGISTRY, get_display_names, resolve_model_from_display
 from evals.cascade import run_eval_suite
 from evals.bias_check import run_bias_check
 from evals.judge import DIMENSIONS
 
 st.set_page_config(page_title="Evaluation", page_icon="⚖️", layout="wide")
-if not check_password():
-    st.stop()
 
 load_fluent_css()
 
@@ -99,60 +97,73 @@ with tab_eval:
         run_button_disabled = False
         run_button_tooltip = "Run the evaluation suite"
     
-    if st.button("▶️ Run Evaluation Suite", type="primary", use_container_width=True, 
-                 disabled=run_button_disabled, help=run_button_tooltip):
-        st.session_state.eval_results = None # Clear previous
-        
-        progress_bar = st.progress(0, text="Initializing...")
-        log_expander = st.expander("Live Execution Log", expanded=True)
-        log_container = log_expander.empty()
-        log_text = ""
-        
-        st.markdown("### 📡 Results")
-        live_table_container = st.empty()
-        live_results = []
-        
-        def update_progress(current, total, case_id, status_msg="Running...", result_data=None):
-            global log_text
-            progress = current / total if total > 0 else 0
-            progress_bar.progress(progress, text=f"Processing {current}/{total}: {case_id}")
-            timestamp = time.strftime("%H:%M:%S")
-            log_text += f"[{timestamp}] [{current}/{total}] {case_id}: {status_msg}\n"
-            log_container.code(log_text, language="bash")
+    if is_access_unlocked() and not run_button_disabled:
+        # Original enabled button
+        if st.button("▶️ Run Evaluation Suite", type="primary", use_container_width=True, 
+                     disabled=run_button_disabled, help=run_button_tooltip):
+            st.session_state.eval_results = None # Clear previous
             
-            if result_data:
-                disp_data = result_data.copy()
-                disp_data["Latency (s)"] = disp_data.get("latency_ms", 0) / 1000.0
-                live_results.append(disp_data)
-                df = pd.DataFrame(live_results)
-                if not df.empty:
-                    display_cols = ["case_id", "category", "pass_fail", "weighted_score", "Latency (s)"]
-                    live_table_container.dataframe(
-                        df[[c for c in display_cols if c in df.columns]], 
-                        use_container_width=True, 
-                        hide_index=True
-                    )
+            progress_bar = st.progress(0, text="Initializing...")
+            log_expander = st.expander("Live Execution Log", expanded=True)
+            log_container = log_expander.empty()
+            log_text = ""
+            
+            st.markdown("### 📡 Results")
+            live_table_container = st.empty()
+            live_results = []
+            
+            def update_progress(current, total, case_id, status_msg="Running...", result_data=None):
+                global log_text
+                progress = current / total if total > 0 else 0
+                progress_bar.progress(progress, text=f"Processing {current}/{total}: {case_id}")
+                timestamp = time.strftime("%H:%M:%S")
+                log_text += f"[{timestamp}] [{current}/{total}] {case_id}: {status_msg}\n"
+                log_container.code(log_text, language="bash")
                 
-        start_time = time.time()
+                if result_data:
+                    disp_data = result_data.copy()
+                    disp_data["Latency (s)"] = disp_data.get("latency_ms", 0) / 1000.0
+                    live_results.append(disp_data)
+                    df = pd.DataFrame(live_results)
+                    if not df.empty:
+                        display_cols = ["case_id", "category", "pass_fail", "weighted_score", "Latency (s)"]
+                        live_table_container.dataframe(
+                            df[[c for c in display_cols if c in df.columns]], 
+                            use_container_width=True, 
+                            hide_index=True
+                        )
+                    
+            start_time = time.time()
+            
+            try:
+                results = run_eval_suite(
+                    dataset_type=dataset_type,
+                    provider=None,
+                    model=None,
+                    judge_provider=None,
+                    judge_model=None,
+                    user_email=user_email,
+                    progress_callback=update_progress,
+                    categories=selected_categories
+                )
+                st.session_state.eval_results = results
+                progress_bar.progress(1.0, text="✅ Evaluation Complete!")
+                log_text += f"\n[{time.strftime('%H:%M:%S')}] ✅ Evaluation Complete!\n"
+                log_container.code(log_text, language="bash")
+            except Exception as e:
+                st.error(f"Evaluation failed: {str(e)}")
+                progress_bar.empty()
+    else:
+        # Locked or disabled state
+        button_text = "🔒 Run Evaluation Suite"
+        if run_button_disabled:
+            button_text = "⚠️ No judge model configured"
         
-        try:
-            results = run_eval_suite(
-                dataset_type=dataset_type,
-                provider=None,
-                model=None,
-                judge_provider=None,
-                judge_model=None,
-                user_email=user_email,
-                progress_callback=update_progress,
-                categories=selected_categories
-            )
-            st.session_state.eval_results = results
-            progress_bar.progress(1.0, text="✅ Evaluation Complete!")
-            log_text += f"\n[{time.strftime('%H:%M:%S')}] ✅ Evaluation Complete!\n"
-            log_container.code(log_text, language="bash")
-        except Exception as e:
-            st.error(f"Evaluation failed: {str(e)}")
-            progress_bar.empty()
+        st.button(button_text, 
+                  type="secondary", 
+                  use_container_width=True,
+                  disabled=True,
+                  help="Enter password in Setup page to unlock" if not run_button_disabled else run_button_tooltip)
 
     # --- Display Results ---
     if st.session_state.eval_results:
@@ -218,53 +229,62 @@ with tab_bias:
     with col1:
         sample_size = st.number_input("Sample Size", min_value=1, max_value=20, value=3)
     
-    if st.button("🔍 Run Bias Check", use_container_width=True):
-        st.session_state.bias_results = None
-        
-        progress_bar = st.progress(0, text="Initializing Bias Check...")
-        
-        # Load a small slice of the dataset
-        import random
-        from evals.cascade import load_dataset
-        ds = load_dataset(dataset_type)
-        all_cases = ds["single"]  # Bias check evaluates isolated QA pairs, so only use single-turn cases
-        
-        # Apply global category filter
-        filtered_cases = [c for c in all_cases if c.get("category", "unknown") in selected_categories]
-        if not filtered_cases:
-            st.warning("No cases match the selected categories. Please select different categories in the Configuration section.")
-            st.stop()
+    if is_access_unlocked():
+        # Original enabled button
+        if st.button("🔍 Run Bias Check", use_container_width=True):
+            st.session_state.bias_results = None
             
-        test_cases = random.sample(filtered_cases, min(sample_size, len(filtered_cases)))
-        
-        live_bias_container = st.empty()
-        bias_live_data = []
-        
-        def update_bias_progress(current, total, case_id, result=None):
-            progress_bar.progress(current / total, text=f"Checking bias {current}/{total}: {case_id}")
+            progress_bar = st.progress(0, text="Initializing Bias Check...")
             
-            if result:
-                bias_live_data.append({
-                    "Case ID": case_id,
-                    "Base Score": f"{result['normal_weighted']:.2f}",
-                    "Swapped Score": f"{result['swapped_weighted']:.2f}",
-                    "Delta": f"{result['normal_weighted'] - result['swapped_weighted']:.2f}"
-                })
-                live_bias_container.dataframe(pd.DataFrame(bias_live_data), use_container_width=True, hide_index=True)
+            # Load a small slice of the dataset
+            import random
+            from evals.cascade import load_dataset
+            ds = load_dataset(dataset_type)
+            all_cases = ds["single"]  # Bias check evaluates isolated QA pairs, so only use single-turn cases
             
-        try:
-            b_results = run_bias_check(
-                test_cases=test_cases,
-                provider=None,
-                model=None,
-                progress_callback=update_bias_progress
-            )
-            st.session_state.bias_results = b_results
-            progress_bar.progress(1.0, text="✅ Bias Check Complete!")
-        except Exception as e:
-            st.error(f"Bias check failed: {str(e)}")
-            progress_bar.empty()
+            # Apply global category filter
+            filtered_cases = [c for c in all_cases if c.get("category", "unknown") in selected_categories]
+            if not filtered_cases:
+                st.warning("No cases match the selected categories. Please select different categories in the Configuration section.")
+                st.stop()
+                
+            test_cases = random.sample(filtered_cases, min(sample_size, len(filtered_cases)))
             
+            live_bias_container = st.empty()
+            bias_live_data = []
+            
+            def update_bias_progress(current, total, case_id, result=None):
+                progress_bar.progress(current / total, text=f"Checking bias {current}/{total}: {case_id}")
+                
+                if result:
+                    bias_live_data.append({
+                        "Case ID": case_id,
+                        "Base Score": f"{result['normal_weighted']:.2f}",
+                        "Swapped Score": f"{result['swapped_weighted']:.2f}",
+                        "Delta": f"{result['normal_weighted'] - result['swapped_weighted']:.2f}"
+                    })
+                    live_bias_container.dataframe(pd.DataFrame(bias_live_data), use_container_width=True, hide_index=True)
+                
+            try:
+                b_results = run_bias_check(
+                    test_cases=test_cases,
+                    provider=None,
+                    model=None,
+                    progress_callback=update_bias_progress
+                )
+                st.session_state.bias_results = b_results
+                progress_bar.progress(1.0, text="✅ Bias Check Complete!")
+            except Exception as e:
+                st.error(f"Bias check failed: {str(e)}")
+                progress_bar.empty()
+    else:
+        # Locked state
+        st.button("🔒 Run Bias Check", 
+                  type="secondary",
+                  use_container_width=True,
+                  disabled=True,
+                  help="Enter password in Setup page to unlock")
+    
     if st.session_state.bias_results:
         b = st.session_state.bias_results
         

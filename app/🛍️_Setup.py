@@ -16,10 +16,6 @@ st.set_page_config(
     layout="wide"
 )
 
-# Enforce password protection if configured
-if not check_password():
-    st.stop()
-
 load_fluent_css()
 
 # Initialize database on first load
@@ -29,15 +25,124 @@ def setup_db():
 
 setup_db()
 
+# ============================================================
+# Header + Password Panel
+# ============================================================
+
+st.markdown(
+    """
+    <style>
+    /* Reduce spacing below page title */
+    .block-container h1{
+        margin-bottom:0.2rem;
+    }
+
+    /* Remove extra space before H2 headers */
+    .block-container h2{
+        margin-top:0.4rem;
+    }
+
+    /* Reduce paragraph spacing */
+    .block-container p{
+        margin-bottom:0.4rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# # Top Row
+# title_col, password_col = st.columns([4.8, 2.2], vertical_alignment="top")
+
+# with title_col:
+
 st.title("Full-Stack AI Customer Support Chatbot + Evaluation Framework")
-st.markdown("""
-Use this Setup page to configure your LLM settings.
-Navigate to the pages on the left to start chatting or view the history.
-""")
 
-# --- CONFIGURATION ---
-st.header("⚙️ System Configuration")
 
+left_col, right_col = st.columns([4.5, 2], vertical_alignment="top")
+
+with left_col:
+
+    st.subheader("⚙️ System Configuration")
+
+    st.caption(
+        """
+        Configure your LLM settings, evaluation model,
+        chatbot behavior and application controls.
+        """
+    )
+
+with right_col:
+    st.markdown(
+        """
+        <div style="margin-top:-10px;">
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown("#### 🔒 Unlock Operations")
+    import hmac
+
+    if "password_feedback" not in st.session_state:
+        st.session_state.password_feedback = None
+
+    if st.session_state.get("access_unlocked"):
+
+        st.success("✅ Token Operations Unlocked")
+
+    else:
+
+        feedback_text = ""
+
+        if st.session_state.password_feedback == "wrong":
+            feedback_text = "❌ Wrong password"
+
+        elif st.session_state.password_feedback == "correct":
+            feedback_text = "✅ Correct"
+
+        with st.form("password_unlock_form", clear_on_submit=True):
+
+            password = st.text_input(
+                "",
+                type="password",
+                placeholder="Enter password...",
+                key="setup_password_input",
+                label_visibility="collapsed",
+            )
+
+            button_col, status_col = st.columns([1, 1.4])
+
+            with button_col:
+                submitted = st.form_submit_button(
+                    "🔓 Unlock",
+                    use_container_width=True,
+                    type="primary",
+                )
+
+            with status_col:
+                if feedback_text:
+                    st.caption(feedback_text)
+
+            if submitted and password:
+
+                expected = st.secrets.get("APP_PASSWORD", "")
+
+                if expected and hmac.compare_digest(password, expected):
+                    st.session_state.access_unlocked = True
+                    st.session_state.password_feedback = "correct"
+                    st.rerun()
+
+                elif not expected:
+                    st.session_state.access_unlocked = True
+                    st.session_state.password_feedback = None
+                    st.rerun()
+
+                else:
+                    st.session_state.password_feedback = "wrong"
+
+        if password and st.session_state.password_feedback == "wrong":
+            st.session_state.password_feedback = None
+    st.markdown("</div>", unsafe_allow_html=True)
 # --- ROW 1: LLM Selection ---
 st.subheader("LLM Selection")
 top_col1, top_col2 = st.columns(2)

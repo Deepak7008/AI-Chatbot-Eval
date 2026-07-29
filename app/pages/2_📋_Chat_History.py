@@ -9,8 +9,6 @@ from app.ui_utils import load_fluent_css, check_password
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 st.set_page_config(page_title="Chat History", page_icon="📋", layout="wide")
-if not check_password():
-    st.stop()
 
 load_fluent_css()
 st.title("📋 Chat History & Data Flywheel")

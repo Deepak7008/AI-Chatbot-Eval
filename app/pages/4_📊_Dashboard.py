@@ -15,8 +15,6 @@ from evals.judge import DIMENSIONS
 from evals.metrics import spearman_correlation, cohens_d, paired_ttest, bootstrap_ci
 
 st.set_page_config(page_title="Dashboard", page_icon="📊", layout="wide")
-if not check_password():
-    st.stop()
 
 load_fluent_css()
 
