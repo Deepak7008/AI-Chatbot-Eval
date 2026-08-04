@@ -14,4 +14,4 @@ jobs:
       - run: pip install playwright && python -m playwright install --with-deps chromium
       - run: python wake.py
         env:
-          APP_URL: "https://roxor-chatbot-eval.streamlit.app"
+          APP_URL: "https://7008-chatbot-eval.streamlit.app"
