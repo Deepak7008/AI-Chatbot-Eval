@@ -57,7 +57,7 @@ A production-ready AI agent pipeline and comprehensive evaluation framework, bui
 
 4. **Run the Application:**
    ```bash
-   streamlit run "app/🛍️_Setup.py"
+   streamlit run "app/ℹ️_About.py"
    ```
 
 5. Navigate to `http://localhost:8502` in your browser.
@@ -69,8 +69,8 @@ A production-ready AI agent pipeline and comprehensive evaluation framework, bui
 ```
 ChatBot+Eval/
 ├── app/                  # Streamlit Multi-Page UI
-│   ├── 🛍️_Setup.py        # Entry point & Model configuration
-│   ├── pages/            # Chat, History, Eval Runner, Dashboard
+│   ├── About.py        # Entry point & About page
+│   ├── pages/            # Setup, Chat, History, Eval Runner, Dashboard
 │   └── assets/           # Midnight Linear custom CSS
 ├── agents/               # AI Pipeline & Logic
 │   ├── router.py         # Intent classification

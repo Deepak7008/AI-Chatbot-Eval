@@ -3,12 +3,12 @@ import os
 import sys
 
 # Ensure the root directory is in the path so we can import our modules
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from evals.db import init_db
 from agents.llm_client import get_display_names, resolve_model_from_display, MODEL_REGISTRY
 from agents.utils import load_json
-from app.ui_utils import load_fluent_css, check_password
+from app.ui_utils import load_fluent_css, check_password, is_access_unlocked
 
 st.set_page_config(
     page_title="Setup",
@@ -56,14 +56,14 @@ st.markdown(
 
 # with title_col:
 
-st.title("Full-Stack AI Customer Support Chatbot + Evaluation Framework")
+#st.title("Full-Stack AI Customer Support Chatbot + Evaluation Framework")
 
 
 left_col, right_col = st.columns([4.5, 2], vertical_alignment="top")
 
 with left_col:
 
-    st.subheader("⚙️ System Configuration")
+    st.title("⚙️ System Configuration")
 
     st.caption(
         """
@@ -71,6 +71,44 @@ with left_col:
         chatbot behavior and application controls.
         """
     )
+    st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
+
+    st.markdown("#### 👤 Persona")
+    
+    persona_col, _ = st.columns([2,3])
+
+    
+    mock_db = load_json("mock_db.json")
+    users = mock_db.get("users", [])
+
+    user_options = ["None (Guest)"] + [
+        f"{u['name']} ({u['email']})"
+        for u in users
+    ]
+
+    current_persona = st.session_state.get(
+        "current_persona",
+        "None (Guest)"
+    )
+    with persona_col:
+        selected_persona = st.selectbox(
+        "Simulate Login As:",
+        options=user_options,
+        index=user_options.index(current_persona)
+        if current_persona in user_options else 0
+    )
+
+    st.session_state["current_persona"] = selected_persona
+
+    if selected_persona != "None (Guest)":
+        import re
+
+        email_match = re.search(r'\((.*?)\)', selected_persona)
+
+        if email_match:
+            os.environ["CURRENT_USER_EMAIL"] = email_match.group(1)
+    else:
+        os.environ["CURRENT_USER_EMAIL"] = ""
 
 with right_col:
     st.markdown(
@@ -139,6 +177,7 @@ with right_col:
 
                 else:
                     st.session_state.password_feedback = "wrong"
+                    st.rerun()
 
         if password and st.session_state.password_feedback == "wrong":
             st.session_state.password_feedback = None
@@ -242,28 +281,9 @@ with top_col2:
 st.divider()
 
 # --- ROW 2: Context & Limits ---
-mid_col1, mid_col2, mid_col3 = st.columns(3)
+mid_col1, mid_col2 = st.columns(2)
 
 with mid_col1:
-    st.subheader("👤 Persona")
-    mock_db = load_json("mock_db.json")
-    users = mock_db.get("users", [])
-    user_options = ["None (Guest)"] + [f"{u['name']} ({u['email']})" for u in users]
-    
-    current_persona = st.session_state.get("current_persona", "None (Guest)")
-    selected_persona = st.selectbox("Simulate Login As:", options=user_options, index=user_options.index(current_persona) if current_persona in user_options else 0)
-    
-    st.session_state["current_persona"] = selected_persona
-    
-    if selected_persona != "None (Guest)":
-        import re
-        email_match = re.search(r'\((.*?)\)', selected_persona)
-        if email_match:
-            os.environ["CURRENT_USER_EMAIL"] = email_match.group(1)
-    else:
-        os.environ["CURRENT_USER_EMAIL"] = ""
-
-with mid_col2:
     st.subheader("Chatbot Tokens")
     chat_token_options = [256, 512, 1024, 2048, 4096]
     current_chat = int(os.getenv("CHAT_MAX_TOKENS", 1024))
@@ -277,7 +297,7 @@ with mid_col2:
     )
     os.environ["CHAT_MAX_TOKENS"] = str(chat_tokens)
 
-with mid_col3:
+with mid_col2:
     st.subheader("Guardrail Tokens")
     guardrail_token_options = [50, 100, 150, 200, 250, 500]
     current_guardrail = int(os.getenv("GUARDRAIL_MAX_TOKENS", 150))

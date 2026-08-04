@@ -22,25 +22,25 @@ Concept: Cosine Similarity
   Range:   -1.0 (opposite) to 1.0 (identical meaning)
 """
 
-from sentence_transformers import SentenceTransformer
 import numpy as np
 
 # ── MODEL LOADING ─────────────────────────────────────────────────────────────
 # The model is loaded once and cached for the lifetime of the process.
-# First call downloads the model (~80MB) if not already cached locally.
 
 _model = None
 
-def get_model() -> SentenceTransformer:
+def get_model():
     """
     Lazy-loads the sentence-transformers model.
     
     Why lazy-load?
-      Importing this module shouldn't block app startup with a 2-second
-      model load. The model only loads on the first call to cosine_similarity().
+      Importing this module shouldn't block app startup with a multi-second
+      model load. The model (and its heavy torch dependency) only loads on
+      the first call to cosine_similarity().
     """
     global _model
     if _model is None:
+        from sentence_transformers import SentenceTransformer
         _model = SentenceTransformer("all-MiniLM-L6-v2")
     return _model
 

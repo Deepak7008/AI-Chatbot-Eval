@@ -19,11 +19,9 @@ import json
 from dotenv import load_dotenv
 load_dotenv()
 
-try:
-    import google.generativeai as genai
-except ImportError:
-    genai = None
-    
+# NOTE: google.generativeai is imported lazily inside _configure_gemini()
+# because importing it takes ~2.6s and is only needed when Gemini is used.
+
 try:
     from openai import OpenAI
 except ImportError:
@@ -51,6 +49,10 @@ def _get_groq_client():
 def _configure_gemini():
     global _gemini_configured
     if not _gemini_configured:
+        try:
+            import google.generativeai as genai
+        except ImportError:
+            genai = None
         if genai is None:
             raise ImportError("google-generativeai package is not installed")
         api_key = os.getenv("GEMINI_API_KEY")
@@ -220,6 +222,7 @@ def _call_groq(messages, temperature, max_tokens, json_mode, model):
 
 @retry_with_backoff(retries=3)
 def _call_gemini(messages, temperature, max_tokens, json_mode, model):
+    import google.generativeai as genai
     _configure_gemini()
     
     # Convert OpenAI message format to Gemini format
